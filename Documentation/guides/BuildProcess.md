@@ -34,18 +34,6 @@ In broad terms, there are two types of Android application packages
 Not coincidentally, these match the MSBuild `Configuration` which
 produces the package.
 
-### Shared Runtime
-
-The *shared runtime* is a pair of additional Android packages which
-provide the Base Class Library (`mscorlib.dll`, etc.) and the
-Android binding library (`Mono.Android.dll`, etc.). Debug builds
-rely upon the shared runtime in lieu of including the Base Class Library and
-Binding assemblies within the Android application package, allowing the
-Debug package to be smaller.
-
-The shared runtime may be disabled in Debug builds by setting the
-`$(AndroidUseSharedRuntime)` property to `False`.
-
 <a name="Fast_Deployment" />
 
 ### Fast Deployment
@@ -855,16 +843,6 @@ when packaging Release applications.
   than `aapt`.
 
   Added in Xamarin.Android 8.1.
-
-- **AndroidUseSharedRuntime** &ndash; A boolean property that is
-  determines whether the *shared runtime packages* are required in
-  order to run the Application on the target device. Relying on the
-  shared runtime packages allows the Application package to be
-  smaller, speeding up the package creation and deployment process,
-  resulting in a faster build/deploy/debug turnaround cycle.
-
-  This property should be `True` for Debug builds, and `False` for
-  Release projects.
 
 - **AndroidVersionCodePattern** &ndash; A string property which allows
   the developer to customize the `versionCode` in the manifest.

@@ -408,6 +408,10 @@
     <_MSBuildFiles Include="$(MSBuildSrcDir)\Xamarin.Installer.Common.dll" />
     <_MSBuildFiles Include="$(MSBuildSrcDir)\Xamarin.Installer.Common.pdb" />
     <_MSBuildFiles Include="$(MSBuildSrcDir)\Xamarin.Installer.Common.targets" />
+    <_MSBuildFiles Include="$(MSBuildSrcDir)\K4os.Compression.LZ4.dll" />
+    <_MSBuildFiles Include="@(AndroidSupportedTargetJitAbi->'$(MSBuildSrcDir)\lib\%(Identity)\xamarin.sync')"                   Condition=" '$(PackageId)' != 'Microsoft.Android.Sdk' " />
+    <_MSBuildFiles Include="@(AndroidSupportedTargetJitAbi->'$(MSBuildSrcDir)\lib\%(Identity)\xamarin.find')"                   Condition=" '$(PackageId)' != 'Microsoft.Android.Sdk' " />
+    <_MSBuildFiles Include="@(AndroidSupportedTargetJitAbi->'$(MSBuildSrcDir)\lib\%(Identity)\xamarin.stat')"                   Condition=" '$(PackageId)' != 'Microsoft.Android.Sdk' " />
     <LegacyTargetsFiles Include="$(RootBuildDir)\lib\xamarin.android\xbuild\Novell\Xamarin.Android.Bindings.targets" />
     <LegacyTargetsFiles Include="$(RootBuildDir)\lib\xamarin.android\xbuild\Novell\Xamarin.Android.VisualBasic.targets" />
   </ItemGroup>

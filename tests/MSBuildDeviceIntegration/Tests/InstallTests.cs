@@ -52,6 +52,7 @@ namespace Xamarin.Android.Build.Tests
 				Assert.IsTrue (builder.Output.AreTargetsAllBuilt ("_Upload"), "_Upload should have built completely.");
 				Assert.AreEqual ($"package:{proj.PackageName}", RunAdbCommand ($"shell pm list packages {proj.PackageName}").Trim (),
 					$"{proj.PackageName} is not installed on the device.");
+				Assert.IsTrue (builder.Uninstall (proj), "unnstall should have succeeded.");
 			}
 		}
 
@@ -105,7 +106,9 @@ namespace Xamarin.Android.Build.Tests
 			AssertCommercialBuild ();
 			AssertHasDevices ();
 
-			var proj = new XamarinAndroidApplicationProject ();
+			var proj = new XamarinAndroidApplicationProject () {
+				PackageName = "com.xamarin.keytest"
+			};
 			var abis = new string [] { "armeabi-v7a", "x86" };
 			proj.SetProperty (KnownProperties.AndroidSupportedAbis, string.Join (";", abis));
 			using (var builder = CreateApkBuilder ()) {
@@ -124,6 +127,7 @@ namespace Xamarin.Android.Build.Tests
 				proj.SetProperty ("AndroidSigningKeyAlias", "mykey");
 
 				Assert.IsTrue (builder.Install (proj), "second install should succeed.");
+				Assert.IsTrue (builder.Uninstall (proj), "unnstall should have succeeded.");
 			}
 		}
 
@@ -163,7 +167,7 @@ namespace Xamarin.Android.Build.Tests
 				Assert.IsTrue (builder.Install (proj));
 				Assert.AreEqual ($"package:{proj.PackageName}", RunAdbCommand ($"shell pm list packages {proj.PackageName}").Trim (),
 					$"{proj.PackageName} is not installed on the device.");
-			
+
 				directorylist = string.Empty;
 				foreach (var dir in overrideDirs) {
 					var listing = RunAdbCommand ($"shell ls {dir}");
@@ -184,7 +188,7 @@ namespace Xamarin.Android.Build.Tests
 						directorylist += listing;
 				}
 				StringAssert.Contains ($"{proj.AssemblyName}", directorylist, $"{proj.AssemblyName} not found in fastdev directory.");
-			
+
 				Assert.IsTrue (builder.Uninstall (proj));
 				Assert.AreNotEqual ($"package:{proj.PackageName}", RunAdbCommand ($"shell pm list packages {proj.PackageName}").Trim (),
 					$"{proj.PackageName} is installed on the device.");
@@ -202,7 +206,6 @@ namespace Xamarin.Android.Build.Tests
 			};
 			proj.SetProperty (proj.ReleaseProperties, "Optimize", false);
 			proj.SetProperty (proj.ReleaseProperties, "DebugType", "none");
-			proj.SetProperty (proj.ReleaseProperties, "AndroidUseSharedRuntime", false);
 			proj.RemoveProperty (proj.ReleaseProperties, "EmbedAssembliesIntoApk");
 			var abis = new string [] { "armeabi-v7a", "x86" };
 			proj.SetProperty (KnownProperties.AndroidSupportedAbis, string.Join (";", abis));
@@ -242,7 +245,7 @@ namespace Xamarin.Android.Build.Tests
 				StringAssert.Contains ($"{proj.ProjectName}.dll", directorylist, $"{proj.ProjectName}.dll should exist in the .__override__ directory.");
 				StringAssert.Contains ($"System.dll", directorylist, $"System.dll should exist in the .__override__ directory.");
 				StringAssert.Contains ($"Mono.Android.dll", directorylist, $"Mono.Android.dll should exist in the .__override__ directory.");
-
+				Assert.IsTrue (builder.Uninstall (proj), "unnstall should have succeeded.");
 			}
 		}
 
@@ -255,7 +258,6 @@ namespace Xamarin.Android.Build.Tests
 			//Setup a situation where we get INSTALL_FAILED_NO_MATCHING_ABIS
 			var abi = "armeabi-v7a";
 			var proj = new XamarinAndroidApplicationProject {
-				AndroidUseSharedRuntime = false,
 				EmbedAssembliesIntoApk = true,
 			};
 			proj.SetProperty (proj.DebugProperties, KnownProperties.AndroidSupportedAbis, abi);
@@ -277,7 +279,6 @@ namespace Xamarin.Android.Build.Tests
 			AssertHasDevices ();
 
 			var proj = new XamarinAndroidApplicationProject {
-				AndroidUseSharedRuntime = true,
 				EmbedAssembliesIntoApk = false,
 			};
 
@@ -299,7 +300,6 @@ namespace Xamarin.Android.Build.Tests
 				StringAssert.Contains ($"{proj.ProjectName}.dll", directorylist, $"{proj.ProjectName}.dll should exist in the .__override__ directory.");
 
 				//Now toggle FastDev to OFF
-				proj.AndroidUseSharedRuntime = false;
 				proj.EmbedAssembliesIntoApk = true;
 				var abis = new string [] { "armeabi-v7a", "x86" };
 				proj.SetProperty (KnownProperties.AndroidSupportedAbis, string.Join (";", abis));
@@ -317,6 +317,7 @@ namespace Xamarin.Android.Build.Tests
 
 				//Deploy one last time to verify install still works without the .__override__ directory existing
 				Assert.IsTrue (builder.Install (proj), "Third install should have succeeded.");
+				Assert.IsTrue (builder.Uninstall (proj), "unnstall should have succeeded.");
 			}
 		}
 
@@ -328,7 +329,6 @@ namespace Xamarin.Android.Build.Tests
 
 			var serial = GetAttachedDeviceSerial ();
 			var proj = new XamarinAndroidApplicationProject ();
-			proj.SetProperty (proj.DebugProperties, "AndroidUseSharedRuntime", true);
 			proj.SetProperty (proj.DebugProperties, "EmbedAssembliesIntoApk", false);
 
 			using (var b = CreateApkBuilder (Path.Combine ("temp", TestName))) {

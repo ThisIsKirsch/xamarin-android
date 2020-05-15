@@ -66,7 +66,7 @@ namespace Xamarin.ProjectTools
 			PackageName = PackageName ?? string.Format ("{0}.{0}", ProjectName);
 			JavaPackageName = JavaPackageName ?? PackageName.ToLowerInvariant ();
 
-			OtherBuildItems.Add (new BuildItem.NoActionResource ("Properties\\AndroidManifest.xml") { TextContent = () => 
+			OtherBuildItems.Add (new BuildItem.NoActionResource ("Properties\\AndroidManifest.xml") { TextContent = () =>
 					AndroidManifest.Replace("${PROJECT_NAME}", ProjectName).
 					Replace ("${PACKAGENAME}", PackageName) });
 			AndroidResources.Add (new AndroidItem.AndroidResource ("Resources\\layout\\Main.axml") { TextContent = () => LayoutMain });
@@ -108,11 +108,6 @@ namespace Xamarin.ProjectTools
 		public bool Deterministic {
 			get { return string.Equals (GetProperty (KnownProperties.Deterministic), "True", StringComparison.OrdinalIgnoreCase); }
 			set { SetProperty (KnownProperties.Deterministic, value.ToString ()); }
-		}
-
-		public bool AndroidUseSharedRuntime {
-			get { return string.Equals (GetProperty (KnownProperties.AndroidUseSharedRuntime), "True", StringComparison.OrdinalIgnoreCase); }
-			set { SetProperty (KnownProperties.AndroidUseSharedRuntime, value.ToString ()); }
 		}
 
 		public bool EmbedAssembliesIntoApk {
