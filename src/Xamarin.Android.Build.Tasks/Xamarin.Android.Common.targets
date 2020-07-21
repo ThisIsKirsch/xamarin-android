@@ -2622,15 +2622,9 @@ because xbuild doesn't support framework reference assemblies.
   <PropertyGroup>
     <_AndroidAllowMissingSdkTooling>True</_AndroidAllowMissingSdkTooling>
   </PropertyGroup>
-<<<<<<< HEAD
 </Target>
 
 <Target Name="GetAndroidDependencies" DependsOnTargets="$(GetAndroidDependenciesDependsOn)" Returns="@(AndroidDependency)">
-=======
-</Target>
-
-<Target Name="GetAndroidDependencies" DependsOnTargets="_BeforeGetAndroidDependencies;_SetLatestTargetFrameworkVersion;$(GetAndroidDependenciesDependsOn)" Returns="@(AndroidDependency)">
->>>>>>> Fast Dev V2
   <PropertyGroup>
     <_ProjectAndroidManifest>$(ProjectDir)$(AndroidManifest)</_ProjectAndroidManifest>
     <_NdkRequired Condition="'$(BundleAssemblies)' == 'True' Or '$(EnableLLVM)' == 'True'">true</_NdkRequired>
