@@ -22,6 +22,7 @@
 
   <!-- Default item includes (globs and implicit references) -->
   <Import Project="Microsoft.Android.Sdk.DefaultItems.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)..\tools\Xamarin.Android.Common.Debugging.props" />
   <!-- Build ordering, should be imported before Xamarin.Android.Common.targets -->
   <Import Project="$(MSBuildThisFileDirectory)Microsoft.Android.Sdk.BuildOrder.targets" />
 
@@ -39,7 +40,7 @@
     <ProjectCapability Include="Mobile" />
     <ProjectCapability Include="Android" />
     <ProjectCapability Include="AndroidApplication" Condition="$(AndroidApplication)" />
-    
+
     <!-- Conflicts with our targets generator in VS+CPS: See https://work.azdo.io/1112733 -->
     <ProjectCapability Remove="LaunchProfiles" />
   </ItemGroup>
